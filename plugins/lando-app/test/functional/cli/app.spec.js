@@ -222,11 +222,39 @@ describe('App Commands', function() {
    * The logs command
    */
   describe('#logs', function() {
-    it('shows logs for all containers');
+    before(function() {
+      // We need to make sure to start the app to get a bit of output to collect
+      this.cliTest.execFile(this.executable, ['start'], {cwd: this.appFolder});
+      this.cmd = this.cliTest.execFile(this.executable, ['logs'], {cwd: this.appFolder});
+    });
 
-    it('filters by service');
+    it('shows logs for all containers', function() {
+      this.cmd.then((res) => {
+        return res.stdout.should
+          .match(/landotest_node_1/)
+          .and
+          .match(/landotest_redis_1/);
+        });
+    });
 
-    it('can show/hide timestamps');
+
+    it('filters by service', function() {
+      this.cliTest.execFile(this.executable, ['logs', '-s', 'node'], {cwd: this.appFolder})
+      .then((res) => {
+        return res.should
+          .match('/landotest_node_1')
+          .but
+          .not
+          .match('/landotest_redis_1/');
+      });
+    });
+
+    it('can show/hide timestamps', function() {
+      this.cliTest.execFile(this.executable, ['logs', '-t'], {cwd: this.appFolder})
+      .then((res) => {
+        return res.should.match(/sometimestampregex/);
+      });
+    });
 
     it('can follow logs');
   });
@@ -235,7 +263,19 @@ describe('App Commands', function() {
    * The poweroff command
    */
   describe('#poweroff', function() {
-    it('powers down all containers including proxy');
+    before(function() {
+      this.cmd = this.cliTest.execFile(
+        this.executable,
+        ['poweroff'],
+        {cwd: this.appFolder}
+      );
+    });
+
+    it('powers down all containers including proxy', function() {
+      return this.cmd.then((res) => {
+        this.docker.getContainer('landotest_node_1').then((data) => console.log(data));
+      });
+    });
   });
 
   /**
@@ -243,5 +283,18 @@ describe('App Commands', function() {
    */
   describe('#rebuild', function() {
     it('stops, removes, an')
+  });
+
+  /**
+   * The restart command
+   */
+  describe('#restart', function() {
+  });
+
+  /**
+   * The share command
+   */
+  describe('#share', function() {
+
   });
 });
