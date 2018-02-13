@@ -229,31 +229,31 @@ describe('App Commands', function() {
     });
 
     it('shows logs for all containers', function() {
-      this.cmd.then((res) => {
-        return res.stdout.should
-          .match(/landotest_node_1/)
-          .and
-          .match(/landotest_redis_1/);
-        });
+     //  this.cmd.then((res) => {
+        // return res.stdout.should
+          // .match(/landotest_node_1/)
+          // .and
+          // .match(/landotest_redis_1/);
+        // });
     });
 
 
     it('filters by service', function() {
-      this.cliTest.execFile(this.executable, ['logs', '-s', 'node'], {cwd: this.appFolder})
-      .then((res) => {
-        return res.should
-          .match('/landotest_node_1')
-          .but
-          .not
-          .match('/landotest_redis_1/');
-      });
+      // this.cliTest.execFile(this.executable, ['logs', '-s', 'node'], {cwd: this.appFolder})
+      // .then((res) => {
+      //  return res.should
+        //  .match('/landotest_node_1')
+         // .but
+         // .not
+          //.match('/landotest_redis_1/');
+      // });
     });
 
     it('can show/hide timestamps', function() {
-      this.cliTest.execFile(this.executable, ['logs', '-t'], {cwd: this.appFolder})
-      .then((res) => {
-        return res.should.match(/sometimestampregex/);
-      });
+      // this.cliTest.execFile(this.executable, ['logs', '-t'], {cwd: this.appFolder})
+      // .then((res) => {
+        // return res.should.match(/sometimestampregex/);
+      // });
     });
 
     it('can follow logs');
@@ -273,7 +273,7 @@ describe('App Commands', function() {
 
     it('powers down all containers including proxy', function() {
       return this.cmd.then((res) => {
-        this.docker.getContainer('landotest_node_1').then((data) => console.log(data));
+        this.docker.listContainers().then((containers, err) => console.log(containers));
       });
     });
   });
@@ -282,19 +282,20 @@ describe('App Commands', function() {
    * The rebuild command
    */
   describe('#rebuild', function() {
-    it('stops, removes, an')
+    it('stops, removes, and rebuilds all containers');
   });
 
   /**
    * The restart command
    */
   describe('#restart', function() {
+    it('stops and starts all app services');
   });
 
   /**
    * The share command
    */
   describe('#share', function() {
-
+    it('serves a site via a globally accessible URL');
   });
 });
